@@ -2,7 +2,8 @@ import { createElement } from '../render.js';
 
 const createFilmsListContainerTemplate = (emptyMessage = 'There are no movies in our database') => `<section class="films">
     <section class="films-list">
-      <h2 class="films-list__title">${emptyMessage}</h2>
+      <h2 class="films-list__title visually-hidden">${emptyMessage}</h2>
+      <div class="films-list__container"></div>
 
       <!--
         Значение отображаемого текста зависит от выбранного фильтра:
