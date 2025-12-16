@@ -14,8 +14,15 @@ module.exports = {
     // Имя файла со сборкой:
     filename: 'bundle.js',
     // Очистка перед сборкой
-    clean: true
+    clean: true,
   },
+  // Автоматическое открытие вкладки браузера:
+  devServer: {
+    open: true,
+    host: 'localhost',
+    port: 8080
+  },
+
   module: {
     rules: [
       {
