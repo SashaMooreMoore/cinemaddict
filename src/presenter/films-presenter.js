@@ -1,29 +1,53 @@
-import { render, RenderPosition } from '../render';
+import { render } from '../render';
 import LoadingView from '../view/loading-view';
-import FilmsListContainer from '../view/film-list-container-view';
 import FilmCardView from '../view/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button';
 import FiltersView from '../view/filter-view';
-import MenuView from '../view/menu';
+import Films from '../view/fllms-view';
+import FilmsList from '../view/film-list-view';
+import FilmsListTitle from '../view/films-list-title';
+import FilmsListDiv from '../view/films-list-container';
+import FilmsListExtra from '../view/flim-list-extra';
 
 export default class FilmsPresenter {
   loadingComponent = new LoadingView();
+  filmsContainerComponent = new Films();
+  filmsList = new FilmsList();
+  filmsListDiv = new FilmsListDiv();
+  filmsSectionExtraLeft = new FilmsListExtra();
+  filmsSectionExtraRight = new FilmsListExtra();
+  divFilmsExtraLeft = new FilmsListDiv();
+  divFilmsExtraRight = new FilmsListDiv();
 
   init = (filmsContainer) => {
+
     this.filmsContainer = filmsContainer;
 
-    // render(this.loadingComponent, this.filmsContainer);
-    render(new FilmsListContainer, this.filmsContainer);
-    render(new FiltersView(), this.filmsContainer, RenderPosition.AFTERBEGIN);
-    render(new MenuView(), this.filmsContainer, RenderPosition.AFTERBEGIN);
+    render(new FiltersView(), this.filmsContainer);
+    render(this.filmsContainerComponent, this.filmsContainer);
+    render(this.filmsList, this.filmsContainerComponent.getElement());
+    render(new FilmsListTitle('All movies. Upcoming'), this.filmsList.getElement());
+    render(this.filmsListDiv, this.filmsList.getElement());
 
-    const CardsContainer = document.querySelector('.films-list__container');
     for (let i = 0; i < 5; i++) {
-      render(new FilmCardView(), CardsContainer);
+      render(new FilmCardView(), this.filmsListDiv.getElement());
     }
 
-    const filmListSection = document.querySelector('.films-list');
-    render(new ShowMoreButtonView(), filmListSection);
+    render(new ShowMoreButtonView(), this.filmsList.getElement());
+
+    render(this.filmsSectionExtraLeft, this.filmsContainerComponent.getElement());
+    render(new FilmsListTitle('Top rated'), this.filmsSectionExtraLeft.getElement());
+    render(this.divFilmsExtraLeft, this.filmsSectionExtraLeft.getElement());
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCardView(), this.divFilmsExtraLeft.getElement());
+    }
+
+    render(this.filmsSectionExtraRight, this.filmsContainerComponent.getElement());
+    render(new FilmsListTitle('Most commented'), this.filmsSectionExtraRight.getElement());
+    render(this.divFilmsExtraRight, this.filmsSectionExtraRight.getElement());
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCardView(), this.divFilmsExtraRight.getElement());
+    }
   };
 
 }
