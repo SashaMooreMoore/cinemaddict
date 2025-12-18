@@ -1,11 +1,11 @@
 import { createElement } from '../render.js';
 
-const createFilmDetailsBottomContainerTemplate = () =>
-  '<div class="film-details__bottom-container"></div>';
+const createFilmDetailsCommentsWrapTemplate = () =>
+  '<section class="film-details__comments-wrap"></section>';
 
-export default class FilmDetailsBottomContainer {
+export default class FilmDetailsCommentsWrap {
   getTemplate() {
-    return createFilmDetailsBottomContainerTemplate();
+    return createFilmDetailsCommentsWrapTemplate();
   }
 
   getElement() {

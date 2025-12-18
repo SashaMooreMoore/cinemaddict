@@ -8,6 +8,10 @@ import FilmDetailsInfoWrap from '../view/film-details-info-wrap';
 import FilmDetailsPosterImg from '../view/film-details-poster';
 import FilmDetailsInfo from '../view/film-details-info';
 import FilmDetailsControlsSection from '../view/film-details-controls-section';
+import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
+import FilmDetailsCommentsTitle from '../view/film-details-comments-title';
+import FilmDetailsCommentsList from '../view/film-details-comments-list';
+import FilmDetailsNewComment from '../view/film-details-new-comment';
 
 
 export default class PopapPresenter {
@@ -20,6 +24,10 @@ export default class PopapPresenter {
   filmDetailsPosterImg = new FilmDetailsPosterImg();
   filmDetailsInfo = new FilmDetailsInfo();
   filmDetailsControlsSection = new FilmDetailsControlsSection();
+  filmDetailsCommentsWrap = new FilmDetailsCommentsWrap();
+  filmDetailsCommentsTitle = new FilmDetailsCommentsTitle();
+  filmDetailsCommentsList = new FilmDetailsCommentsList();
+  filmDetailsNewComment = new FilmDetailsNewComment();
 
   init = (popapContainer) => {
     this.popapContainer = popapContainer;
@@ -31,7 +39,10 @@ export default class PopapPresenter {
     render(this.filmDetailsInfoWrap, this.filmDetailsTopContainer.getElement());
     render(this.filmDetailsPosterImg, this.filmDetailsInfoWrap.getElement());
     render(this.filmDetailsInfo, this.filmDetailsInfoWrap.getElement());
-    render(this.filmDetailsControlsSection, this.filmDetailsInfoWrap.getElement());
-
+    render(this.filmDetailsControlsSection, this.filmDetailsTopContainer.getElement());
+    render(this.filmDetailsCommentsWrap, this.filmDetailsBottomContainer.getElement());
+    render(this.filmDetailsCommentsTitle, this.filmDetailsCommentsWrap.getElement());
+    render(this.filmDetailsCommentsList, this.filmDetailsCommentsWrap.getElement());
+    render(this.filmDetailsNewComment, this.filmDetailsCommentsWrap.getElement());
   };
 }
