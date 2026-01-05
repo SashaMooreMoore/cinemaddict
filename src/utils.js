@@ -7,7 +7,7 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const getUhiqueInteger = (arrayID) => {
+const getUniqueInteger = (arrayID) => {
   const errorMessage = 'Не удалось сгенерировать уникальный id';
   const MAX_ATTEMPTS = 1000;
   const MAX_ID = 1000;
@@ -22,4 +22,6 @@ const getUhiqueInteger = (arrayID) => {
   throw new Error(errorMessage);
 };
 
-export {getRandomInteger, getUhiqueInteger};
+
+
+export {getRandomInteger, getUniqueInteger, };

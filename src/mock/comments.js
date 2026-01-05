@@ -1,4 +1,4 @@
-const comments = [
+const commentsObjects = [
   {
     'id': '1',
     'author': 'Emma Thompson',
@@ -141,4 +141,4 @@ const comments = [
   }
 ];
 
-export {comments};
+export {commentsObjects};

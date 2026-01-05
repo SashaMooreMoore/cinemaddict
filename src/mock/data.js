@@ -67,4 +67,63 @@ const dates = [
   '2020-12-25T00:15:59.999Z'
 ];
 
-export{names, comments, dates};
+const titles = [
+  'A Little Pony Without The Carpet',
+  'The Last Frame',
+  'Echoes in the Rain',
+  'Beneath Silent Stars',
+  'Midnight in Verona',
+  'Fragments of Tomorrow',
+  'The Clockmaker\'s Daughter',
+  'Where Shadows Sleep',
+  'Paper Wings',
+  'The Velvet Horizon',
+  'Whispers from the Attic',
+  'Breaking the Surface',
+  'The Amber Protocol',
+  'Glass Hearts',
+  'Neon Requiem',
+  'The Forgotten Lighthouse',
+  'Dust and Diamond',
+  'When the Tide Turns',
+  'The Silent Archive',
+  'Edge of the Aurora'
+];
+
+const alternativeTitles = [
+  'Laziness Who Sold Themselves',
+  'Procrastination That Cried Wolf',
+  'Anxiety Eating Toast Alone',
+  'The Day My To-Do List Betrayed Me',
+  'Sadness With Wi-Fi Issues',
+  'Existential Dread in Sweatpants',
+  'Imposter Syndrome Wears a Tie',
+  'My Pillow Is My Co-Founder',
+  'Netflix and Regret',
+  'The Tragedy of Unwashed Dishes',
+  'Ambition That Never Left Bed',
+  'Coffee Without Purpose',
+  'Deadline Running Away From Me',
+  'My Plant Died and So Did I',
+  'Motivation Ghosted Me',
+  'The Algorithm Knows I\'m Faking It',
+  'Silent Panic During Small Talk',
+  'I Forgot My Password and My Dreams',
+  'The Curse of Infinite Tabs',
+  'Adulting Is a Scam They Told Me'
+];
+
+const countries = [
+  'France',
+  'Japan',
+  'Brazil',
+  'Canada',
+  'Australia',
+  'Germany',
+  'India',
+  'South Africa',
+  'Mexico',
+  'New Zealand'
+];
+
+export{names, comments, dates, titles, alternativeTitles, countries};
