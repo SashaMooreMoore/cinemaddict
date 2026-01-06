@@ -29,4 +29,4 @@ const generateMovieObject = () => {
 
 };
 
-export{generateString};
+export{generateString, generateMovieObject};

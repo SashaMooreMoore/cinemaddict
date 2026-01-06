@@ -19,9 +19,14 @@ export default class FilmsPresenter {
   divFilmsExtraLeft = new FilmsListDiv();
   divFilmsExtraRight = new FilmsListDiv();
 
-  init = (filmsContainer) => {
+  init = (filmsContainer, filmModel) => {
 
     this.filmsContainer = filmsContainer;
+    this.filmModel = filmModel;
+    this.boardMovies = [...this.filmModel.getMovies()];
+    for (const movie of this.boardMovies){
+      console.log(movie);
+    }
 
     render(new FiltersView(), this.filmsContainer);
     render(this.filmsContainerComponent, this.filmsContainer);
