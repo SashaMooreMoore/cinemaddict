@@ -1,5 +1,5 @@
-import {names, comments, dates} from './data.js';
-import { getRandomInteger, getUniqueInteger,  } from '../utils.js';
+import {names, comments, dates, titles, alternativeTitles} from './data.js';
+import { getRandomInteger, getUniqueInteger, generateRating } from '../utils.js';
 import {commentsObjects} from './comments.js';
 
 const ID = new Set();
@@ -24,6 +24,12 @@ const generateMovieObject = () => {
   movieObject['id'] = String(getUniqueInteger(ID));
 
   movieObject['comments'] = generateArrayId(commentsObjects);
+
+  movieObject['film_info'] = {
+    'title': generateString(titles),
+    'alternative_title': generateString(alternativeTitles),
+    'total_rating': generateRating(),
+  };
 
   return movieObject;
 

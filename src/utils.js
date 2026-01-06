@@ -22,6 +22,7 @@ const getUniqueInteger = (arrayID) => {
   throw new Error(errorMessage);
 };
 
+const generateRating = () =>  Number((Math.random() * 9 + 1).toFixed(1)); // от 1.0 до 10.0
 
 
-export {getRandomInteger, getUniqueInteger, };
+export {getRandomInteger, getUniqueInteger, generateRating};
