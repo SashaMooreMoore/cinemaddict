@@ -126,4 +126,50 @@ const countries = [
   'New Zealand'
 ];
 
-export{names, comments, dates, titles, alternativeTitles, countries};
+const posters = [
+  'made-for-each-other.png',
+  'popeye-meets-sinbad.png',
+  'sagebrush-trail.jpg',
+  'santa-claus-conquers-the-martians.jpg',
+  'the-dance-of-life.jpg',
+  'the-great-flamarion.jpg',
+  'the-man-with-the-golden-arm.jpg'
+];
+
+const genres = [
+  'Action',
+  'Adventure',
+  'Animation',
+  'Biography',
+  'Comedy',
+  'Crime',
+  'Documentary',
+  'Drama',
+  'Family',
+  'Fantasy',
+  'Film-Noir',
+  'History',
+  'Horror',
+  'Musical',
+  'Mystery',
+  'Romance',
+  'Sci-Fi',
+  'Sport',
+  'Thriller',
+  'War'
+];
+
+const descriptions = [
+  'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.',
+  'A heart-wrenching sci-fi epic about loneliness in space, inspired by "Winnie the Pooh" and "The Godfather", featuring zero dialogue and 47 minutes of rain.',
+  'Critically acclaimed comedy that redefines friendship, co-directed by the minds behind "SpongeBob SquarePants" and "Schindler\'s List", with a soundtrack by chickens.',
+  'An animated thriller about tax auditors in 19th-century Kyoto, blending the visual style of "My Neighbor Totoro" and the tension of "John Wick".',
+  'A silent black-and-white romance filmed entirely on a Nokia 3310, praised by Tarantino and banned in three countries for excessive use of the color beige.',
+  'From the studio that brought you "Barbie" and "The Texas Chain Saw Massacre" — a musical about depressed potatoes trying to escape a grocery store.',
+  'Award-winning documentary following a squirrel\'s journey across Siberia, narrated by Morgan Freeman and scored by Yanni. Contains one scene that will make you question reality.',
+  'A gritty crime drama set in a kindergarten, starring actual toddlers, with fight choreography by Jackie Chan and emotional depth rivaling "The Notebook".',
+  'From the creators of "Peppa Pig" and "Requiem for a Dream" — a psychedelic western about a cowboy who only speaks in emojis.',
+  'Shot in one take on a rollercoaster, this existential drama combines the pacing of "Mad Max" with the philosophical weight of a fortune cookie. Features a cameo by a confused penguin.'
+];
+
+export{names, comments, dates, titles, alternativeTitles, countries, posters, genres, descriptions};
