@@ -26,7 +26,7 @@ const getUniqueInteger = (arrayID) => {
 
 const generateRating = () =>  Number((Math.random() * 9 + 1).toFixed(1)); // от 1.0 до 10.0
 
-const humanizeMovieDueDate = (dueDate) => dayjs(dueDate).format('D MMMM');
+const humanizeMovieDueDate = (dueDate) => dayjs(dueDate).format('YYYY');
 
 
 export {getRandomInteger, getUniqueInteger, generateRating, humanizeMovieDueDate};
