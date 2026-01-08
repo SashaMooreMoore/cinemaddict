@@ -18,6 +18,17 @@ const generateArrayId = (array) => {
     .map(el => el.id);
 };
 
+const convertRunTime = (minutes) => {
+  const parts = [];
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  if (hours > 0) parts.push(`${hours}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+
+  return parts.join(' ') || '0m';
+};
+
 const generateMovieObject = () => {
   const movieObject = {};
 
@@ -38,8 +49,8 @@ const generateMovieObject = () => {
       'date': generateString(dates),
       'release_country': generateString(countries)
     },
-    'runtime': getRandomInteger(70, 150),
-    'genre': Array.from({length: getRandomInteger(1,3)}, () => generateString(genres)),
+    'runtime': convertRunTime(getRandomInteger(70, 150)),
+    'genre': Array.from({length: getRandomInteger(1,)}, () => generateString(genres)),
     'description': generateString(descriptions)
   };
 
