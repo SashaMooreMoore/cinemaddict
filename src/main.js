@@ -12,7 +12,7 @@ const siteMainElement = document.querySelector('.main');
 const footerElement = document.querySelector('.footer');
 
 const filmsPresenter = new FilmsPresenter();
-const popapPresenter = new PopapPresenter();
+// const popapPresenter = new PopapPresenter();
 const movieModel = new MovieModel();
 
 render(new UserRankView(), siteHeaderElement);

@@ -24,9 +24,6 @@ export default class FilmsPresenter {
     this.filmsContainer = filmsContainer;
     this.filmModel = filmModel;
     this.boardMovies = [...this.filmModel.getMovies()];
-    for (const movie of this.boardMovies){
-      console.log(movie);
-    }
 
     render(new FiltersView(), this.filmsContainer);
     render(this.filmsContainerComponent, this.filmsContainer);
@@ -44,14 +41,14 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Top rated'), this.filmsSectionExtraLeft.getElement());
     render(this.divFilmsExtraLeft, this.filmsSectionExtraLeft.getElement());
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(), this.divFilmsExtraLeft.getElement());
+      render(new FilmCardView(this.boardMovies[i]), this.divFilmsExtraLeft.getElement());
     }
 
     render(this.filmsSectionExtraRight, this.filmsContainerComponent.getElement());
     render(new FilmsListTitle('Most commented'), this.filmsSectionExtraRight.getElement());
     render(this.divFilmsExtraRight, this.filmsSectionExtraRight.getElement());
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(), this.divFilmsExtraRight.getElement());
+      render(new FilmCardView(this.boardMovies[i]), this.divFilmsExtraRight.getElement());
     }
   };
 
