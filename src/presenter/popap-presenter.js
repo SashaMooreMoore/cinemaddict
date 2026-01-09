@@ -29,8 +29,10 @@ export default class PopapPresenter {
   filmDetailsCommentsList = new FilmDetailsCommentsList();
   filmDetailsNewComment = new FilmDetailsNewComment();
 
-  init = (popapContainer) => {
+  init = (popapContainer, filmModel) => {
     this.popapContainer = popapContainer;
+    this.filmModel = filmModel;
+
     render(this.filmDetailsSection, popapContainer, RenderPosition.AFTEREND);
     render(this.filmDetailsForm, this.filmDetailsSection.getElement());
     render(this.filmDetailsTopContainer, this.filmDetailsForm.getElement());
