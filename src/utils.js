@@ -28,5 +28,28 @@ const generateRating = () =>  Number((Math.random() * 9 + 1).toFixed(1)); // Ð¾Ñ
 
 const humanizeMovieDueDate = (dueDate) => dayjs(dueDate).format('YYYY');
 
+const movieDateForPopap = (dueDate) => dayjs(dueDate).format('DD MMMM YYYY');
 
-export {getRandomInteger, getUniqueInteger, generateRating, humanizeMovieDueDate};
+const convertRunTime = (minutes) => {
+  const parts = [];
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+
+  if (hours > 0) parts.push(`${hours}h`);
+  if (mins > 0) parts.push(`${mins}m`);
+
+  return parts.join(' ') || '0m';
+};
+
+const checkDescLength = (str) => str.length > 140 ? str.slice(0, 139) + '\u2026' : str;
+
+
+export {
+  getRandomInteger,
+  getUniqueInteger,
+  generateRating,
+  humanizeMovieDueDate,
+  movieDateForPopap,
+  convertRunTime,
+  checkDescLength
+};

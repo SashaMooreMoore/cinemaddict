@@ -1,5 +1,5 @@
 import {names, comments, dates, titles, alternativeTitles, posters, countries, genres, descriptions} from './data.js';
-import { getRandomInteger, getUniqueInteger, generateRating } from '../utils.js';
+import { getRandomInteger, getUniqueInteger, generateRating, convertRunTime } from '../utils.js';
 import {commentsObjects} from './comments.js';
 
 const ID = new Set();
@@ -16,17 +16,6 @@ const generateArrayId = (array) => {
   return array
     .filter((_, index) => index % divisor === 0)
     .map(el => el.id);
-};
-
-const convertRunTime = (minutes) => {
-  const parts = [];
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-
-  if (hours > 0) parts.push(`${hours}h`);
-  if (mins > 0) parts.push(`${mins}m`);
-
-  return parts.join(' ') || '0m';
 };
 
 const generateMovieObject = () => {
@@ -49,8 +38,8 @@ const generateMovieObject = () => {
       'date': generateString(dates),
       'release_country': generateString(countries)
     },
-    'runtime': convertRunTime(getRandomInteger(70, 150)),
-    'genre': Array.from({length: getRandomInteger(1,)}, () => generateString(genres)),
+    'runtime': getRandomInteger(70, 150),
+    'genre': Array.from({length: getRandomInteger(1, 3)}, () => generateString(genres)),
     'description': generateString(descriptions)
   };
 

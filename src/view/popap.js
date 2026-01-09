@@ -1,7 +1,18 @@
 import { createElement } from '../render.js';
+import { movieDateForPopap, convertRunTime } from '../utils.js';
+
 
 const createPopapTemplate = (movie) => {
   const {id, comments, film_info, user_details} = movie;
+
+  const date = movieDateForPopap(film_info['release']['date']);
+
+  const runTime = convertRunTime(film_info.runtime);
+
+  const genre1 = film_info.genre[0];
+  const genre2 = film_info.genre[1] ? film_info.genre[1] : ' ';
+  const genre3 = film_info.genre[2] ? film_info.genre[1] : ' ';
+
 
   return(
     `<section class="film-details">
@@ -12,54 +23,54 @@ const createPopapTemplate = (movie) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/the-great-flamarion.jpg" alt="">
+          <img class="film-details__poster-img" src="./${film_info.poster}" alt="">
 
-          <p class="film-details__age">18+</p>
+          <p class="film-details__age">${film_info.age_rating}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">The Great Flamarion</h3>
-              <p class="film-details__title-original">Original: The Great Flamarion</p>
+              <h3 class="film-details__title">${film_info.title}</h3>
+              <p class="film-details__title-original">Original: ${film_info.title}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">8.9</p>
+              <p class="film-details__total-rating">${film_info.total_rating}</p>
             </div>
           </div>
 
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">Anthony Mann</td>
+              <td class="film-details__cell">${film_info.director}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+              <td class="film-details__cell">${film_info.writers}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+              <td class="film-details__cell">${film_info.actors}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March 1945</td>
+              <td class="film-details__cell">${date}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">1h 18m</td>
+              <td class="film-details__cell">${runTime}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">USA</td>
+              <td class="film-details__cell">${film_info.release.release_country}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">Drama</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+                <span class="film-details__genre">${genre1}</span>
+                <span class="film-details__genre">${genre2}</span>
+                <span class="film-details__genre">${genre3}</span></td>
             </tr>
           </table>
 

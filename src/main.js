@@ -20,4 +20,4 @@ render(new FooterFilmsStatisticsView(), footerStatisticsElement);
 render(new MenuView(), siteMainElement, RenderPosition.AFTERBEGIN);
 
 filmsPresenter.init(siteMainElement, movieModel);
-popapPresenter.init(footerElement, movieModel);
+// popapPresenter.init(footerElement, movieModel);

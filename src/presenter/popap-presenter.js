@@ -33,8 +33,9 @@ export default class PopapPresenter {
   init = (popapContainer, filmModel) => {
     this.popapContainer = popapContainer;
     this.filmModel = filmModel;
+    this.boardMovies = [...this.filmModel.getMovies()];
 
-    render(new PopapView(this.filmModel), this.popapContainer, RenderPosition.AFTEREND);
+    render(new PopapView(this.boardMovies[0]), this.popapContainer, RenderPosition.AFTEREND);
 
     // render(this.filmDetailsSection, popapContainer, RenderPosition.AFTEREND);
     // render(this.filmDetailsForm, this.filmDetailsSection.getElement());
