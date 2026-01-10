@@ -1,7 +1,7 @@
 import { render, RenderPosition } from '../render';
 // import FilmDetailsSection from '../view/film-details-section';
 // import FilmDetailsForm from '../view/film-details-form';
-// import FilmDetailsTopContainer from '../view/film-details-top-container';
+import FilmDetailsTopContainer from '../view/film-details-top-container';
 // import FilmDetailsBottomContainer from '../view/film-details-bottom-container';
 // import FilmDetailsCloseBtn from '../view/film-details-close-btn';
 // import FilmDetailsInfoWrap from '../view/film-details-info-wrap';
@@ -12,7 +12,8 @@ import { render, RenderPosition } from '../render';
 // import FilmDetailsCommentsTitle from '../view/film-details-comments-title';
 // import FilmDetailsCommentsList from '../view/film-details-comments-list';
 // import FilmDetailsNewComment from '../view/film-details-new-comment';
-import PopapView from '../view/popap';
+// import PopapView from '../view/popap';
+import PopapSectionForm from '../view/popap-section-form';
 
 
 export default class PopapPresenter {
@@ -29,13 +30,21 @@ export default class PopapPresenter {
   // filmDetailsCommentsTitle = new FilmDetailsCommentsTitle();
   // filmDetailsCommentsList = new FilmDetailsCommentsList();
   // filmDetailsNewComment = new FilmDetailsNewComment();
+  popapSectionForm = new PopapSectionForm();
 
   init = (popapContainer, filmModel) => {
     this.popapContainer = popapContainer;
     this.filmModel = filmModel;
     this.boardMovies = [...this.filmModel.getMovies()];
 
-    render(new PopapView(this.boardMovies[0]), this.popapContainer, RenderPosition.AFTEREND);
+
+    render(this.popapSectionForm, this.popapContainer, RenderPosition.AFTEREND);
+    const formElement = this.popapSectionForm.getElement().querySelector('.film-details__inner');
+    console.log(formElement);
+    render(new FilmDetailsTopContainer(this.boardMovies[0]), formElement, RenderPosition.BEFOREEND);
+    // render(this.filmDetailsTopContainer(this.boardMovies[0]), this.popapSectionForm.getElement());
+
+    // render(new PopapView(this.boardMovies[0]), this.popapContainer, RenderPosition.AFTEREND);
 
     // render(this.filmDetailsSection, popapContainer, RenderPosition.AFTEREND);
     // render(this.filmDetailsForm, this.filmDetailsSection.getElement());
