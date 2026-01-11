@@ -8,7 +8,7 @@ import FilmDetailsTopContainer from '../view/film-details-top-container';
 // import FilmDetailsPosterImg from '../view/film-details-poster';
 // import FilmDetailsInfo from '../view/film-details-info';
 // import FilmDetailsControlsSection from '../view/film-details-controls-section';
-// import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
+import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
 // import FilmDetailsCommentsTitle from '../view/film-details-comments-title';
 // import FilmDetailsCommentsList from '../view/film-details-comments-list';
 // import FilmDetailsNewComment from '../view/film-details-new-comment';
@@ -40,8 +40,8 @@ export default class PopapPresenter {
 
     render(this.popapSectionForm, this.popapContainer, RenderPosition.AFTEREND);
     const formElement = this.popapSectionForm.getElement().querySelector('.film-details__inner');
-    console.log(formElement);
     render(new FilmDetailsTopContainer(this.boardMovies[0]), formElement, RenderPosition.BEFOREEND);
+    render(new FilmDetailsCommentsWrap(this.boardMovies[0]), formElement);
     // render(this.filmDetailsTopContainer(this.boardMovies[0]), this.popapSectionForm.getElement());
 
     // render(new PopapView(this.boardMovies[0]), this.popapContainer, RenderPosition.AFTEREND);
