@@ -24,6 +24,7 @@ export default class FilmsPresenter {
     this.filmsContainer = filmsContainer;
     this.filmModel = filmModel;
     this.boardMovies = [...this.filmModel.getMovies()];
+    console.log(this.boardMovies);
     this.sortedMoviesByRating = [...this.boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.sortedMoviesByComments = [...this.boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
 

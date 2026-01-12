@@ -1,35 +1,17 @@
 import { render, RenderPosition } from '../render';
-// import FilmDetailsSection from '../view/film-details-section';
-// import FilmDetailsForm from '../view/film-details-form';
 import FilmDetailsTopContainer from '../view/film-details-top-container';
-// import FilmDetailsBottomContainer from '../view/film-details-bottom-container';
-// import FilmDetailsCloseBtn from '../view/film-details-close-btn';
-// import FilmDetailsInfoWrap from '../view/film-details-info-wrap';
-// import FilmDetailsPosterImg from '../view/film-details-poster';
-// import FilmDetailsInfo from '../view/film-details-info';
-// import FilmDetailsControlsSection from '../view/film-details-controls-section';
 import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
-// import FilmDetailsCommentsTitle from '../view/film-details-comments-title';
-// import FilmDetailsCommentsList from '../view/film-details-comments-list';
-// import FilmDetailsNewComment from '../view/film-details-new-comment';
-// import PopapView from '../view/popap';
 import PopapSectionForm from '../view/popap-section-form';
-
+import FilmDetailsNewComment from '../view/film-details-new-comment';
+import {commentsObjects} from '../mock/comments';
+import { createElement } from '../render';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+// Подключаем плагин
+dayjs.extend(relativeTime);
 
 export default class PopapPresenter {
-  // filmDetailsSection = new FilmDetailsSection();
-  // filmDetailsForm = new FilmDetailsForm();
-  // filmDetailsTopContainer = new FilmDetailsTopContainer();
-  // filmDetailsBottomContainer = new FilmDetailsBottomContainer();
-  // filmDetailsCloseBtn = new FilmDetailsCloseBtn();
-  // filmDetailsInfoWrap = new FilmDetailsInfoWrap();
-  // filmDetailsPosterImg = new FilmDetailsPosterImg();
-  // filmDetailsInfo = new FilmDetailsInfo();
-  // filmDetailsControlsSection = new FilmDetailsControlsSection();
-  // filmDetailsCommentsWrap = new FilmDetailsCommentsWrap();
-  // filmDetailsCommentsTitle = new FilmDetailsCommentsTitle();
-  // filmDetailsCommentsList = new FilmDetailsCommentsList();
-  // filmDetailsNewComment = new FilmDetailsNewComment();
+
   popapSectionForm = new PopapSectionForm();
 
   init = (popapContainer, filmModel) => {
@@ -42,22 +24,29 @@ export default class PopapPresenter {
     const formElement = this.popapSectionForm.getElement().querySelector('.film-details__inner');
     render(new FilmDetailsTopContainer(this.boardMovies[0]), formElement, RenderPosition.BEFOREEND);
     render(new FilmDetailsCommentsWrap(this.boardMovies[0]), formElement);
-    // render(this.filmDetailsTopContainer(this.boardMovies[0]), this.popapSectionForm.getElement());
+    const commentsList = this.popapSectionForm.getElement().querySelector('.film-details__comments-list');
+    this.boardMovies[0].comments.slice(0,4).forEach((id) => {
+      const comment = commentsObjects.find((c) => c.id === id);
+      if (!comment) {return '';}
 
-    // render(new PopapView(this.boardMovies[0]), this.popapContainer, RenderPosition.AFTEREND);
-
-    // render(this.filmDetailsSection, popapContainer, RenderPosition.AFTEREND);
-    // render(this.filmDetailsForm, this.filmDetailsSection.getElement());
-    // render(this.filmDetailsTopContainer, this.filmDetailsForm.getElement());
-    // render(this.filmDetailsBottomContainer, this.filmDetailsForm.getElement());
-    // render(this.filmDetailsCloseBtn, this.filmDetailsTopContainer.getElement());
-    // render(this.filmDetailsInfoWrap, this.filmDetailsTopContainer.getElement());
-    // render(this.filmDetailsPosterImg, this.filmDetailsInfoWrap.getElement());
-    // render(this.filmDetailsInfo, this.filmDetailsInfoWrap.getElement());
-    // render(this.filmDetailsControlsSection, this.filmDetailsTopContainer.getElement());
-    // render(this.filmDetailsCommentsWrap, this.filmDetailsBottomContainer.getElement());
-    // render(this.filmDetailsCommentsTitle, this.filmDetailsCommentsWrap.getElement());
-    // render(this.filmDetailsCommentsList, this.filmDetailsCommentsWrap.getElement());
-    // render(this.filmDetailsNewComment, this.filmDetailsCommentsWrap.getElement());
+      const commentElement = createElement(`
+        <li class="film-details__comment">
+              <span class="film-details__comment-emoji">
+                <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
+              </span>
+              <div>
+                <p class="film-details__comment-text">${comment.comment}</p>
+                <p class="film-details__comment-info">
+                  <span class="film-details__comment-author">${comment.author}</span>
+                  <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>
+                  <button class="film-details__comment-delete">Delete</button>
+                </p>
+              </div>
+            </li>`
+      );
+      commentsList.append(commentElement);
+    });
+    const commentsWrap = formElement.querySelector('.film-details__comments-wrap');
+    render(new FilmDetailsNewComment(), commentsWrap);
   };
 }

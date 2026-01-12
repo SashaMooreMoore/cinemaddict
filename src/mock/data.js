@@ -21,7 +21,7 @@ const names = [
   'David Chen'
 ];
 
-const comments = [
+const commentsArray = [
   'Absolutely mind-blowing visuals and a story that stays with you long after the credits roll.',
   'One of the best films I\'ve seen this decade — emotional, smart, and beautifully shot.',
   'The soundtrack alone is worth the watch. Pure cinematic magic!',
@@ -172,4 +172,4 @@ const descriptions = [
   'Shot in one take on a rollercoaster, this existential drama combines the pacing of "Mad Max" with the philosophical weight of a fortune cookie. Features a cameo by a confused penguin.'
 ];
 
-export{names, comments, dates, titles, alternativeTitles, countries, posters, genres, descriptions};
+export{names, commentsArray, dates, titles, alternativeTitles, countries, posters, genres, descriptions};
