@@ -1,5 +1,5 @@
-import {names, comments, dates, titles, alternativeTitles, posters, countries, genres, descriptions} from './data.js';
-import { getRandomInteger, getUniqueInteger, generateRating, convertRunTime } from '../utils.js';
+import {names, dates, titles, alternativeTitles, posters, countries, genres, descriptions} from './data.js';
+import { getRandomInteger, getUniqueInteger, generateRating } from '../utils.js';
 import {commentsObjects} from './comments.js';
 
 const ID = new Set();
@@ -15,7 +15,7 @@ const generateArrayId = (array) => {
   const divisor = getRandomInteger(2,3);
   return array
     .filter((_, index) => index % divisor === 0)
-    .map(el => el.id);
+    .map((el) => el.id);
 };
 
 const generateMovieObject = () => {

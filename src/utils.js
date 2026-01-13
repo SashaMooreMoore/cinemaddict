@@ -35,13 +35,13 @@ const convertRunTime = (minutes) => {
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
 
-  if (hours > 0) parts.push(`${hours}h`);
-  if (mins > 0) parts.push(`${mins}m`);
+  if (hours > 0) {parts.push(`${hours}h`);}
+  if (mins > 0) {parts.push(`${mins}m`);}
 
   return parts.join(' ') || '0m';
 };
 
-const checkDescLength = (str) => str.length > 140 ? str.slice(0, 139) + '\u2026' : str;
+const checkDescLength = (str) => str.length > 140 ? `${str.slice(0, 139)}\u2026` : str;
 
 
 export {
