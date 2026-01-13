@@ -1,7 +1,7 @@
 import { createElement } from '../render.js';
 
 const createFilmDetailsCommentsWrapTemplate = (movie) =>{
-  const {id, comments, film_info, user_details} = movie;
+  const {comments} = movie;
 
   return(
     `<div class="film-details__bottom-container">
