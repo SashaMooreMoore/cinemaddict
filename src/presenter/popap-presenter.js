@@ -17,14 +17,14 @@ export default class PopapPresenter {
   init = (popapContainer, filmModel) => {
     this.popapContainer = popapContainer;
     this.filmModel = filmModel;
-    this.boardMovies = [...this.filmModel.getMovies()];
+    this.boardMovies = [...this.filmModel.movies];
 
 
     render(this.popapSectionForm, this.popapContainer, RenderPosition.AFTEREND);
-    const formElement = this.popapSectionForm.getElement().querySelector('.film-details__inner');
+    const formElement = this.popapSectionForm.element.querySelector('.film-details__inner');
     render(new FilmDetailsTopContainer(this.boardMovies[0]), formElement, RenderPosition.BEFOREEND);
     render(new FilmDetailsCommentsWrap(this.boardMovies[0]), formElement);
-    const commentsList = this.popapSectionForm.getElement().querySelector('.film-details__comments-list');
+    const commentsList = this.popapSectionForm.element.querySelector('.film-details__comments-list');
     this.boardMovies[0].comments.slice(0,4).forEach((id) => {
       const comment = commentsObjects.find((c) => c.id === id);
       if (!comment) {return '';}

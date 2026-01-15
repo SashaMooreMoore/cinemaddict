@@ -23,34 +23,34 @@ export default class FilmsPresenter {
 
     this.filmsContainer = filmsContainer;
     this.filmModel = filmModel;
-    this.boardMovies = [...this.filmModel.getMovies()];
+    this.boardMovies = [...this.filmModel.movies];
     this.sortedMoviesByRating = [...this.boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.sortedMoviesByComments = [...this.boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
 
     render(new FiltersView(), this.filmsContainer);
     render(this.filmsContainerComponent, this.filmsContainer);
-    render(this.filmsList, this.filmsContainerComponent.getElement());
-    render(new FilmsListTitle('All movies. Upcoming'), this.filmsList.getElement());
-    render(this.filmsListDiv, this.filmsList.getElement());
+    render(this.filmsList, this.filmsContainerComponent.element);
+    render(new FilmsListTitle('All movies. Upcoming'), this.filmsList.element);
+    render(this.filmsListDiv, this.filmsList.element);
 
     for (let i = 0; i < 5; i++) {
-      render(new FilmCardView(this.boardMovies[i]), this.filmsListDiv.getElement());
+      render(new FilmCardView(this.boardMovies[i]), this.filmsListDiv.element);
     }
 
-    render(new ShowMoreButtonView(), this.filmsList.getElement());
+    render(new ShowMoreButtonView(), this.filmsList.element);
 
-    render(this.filmsSectionExtraLeft, this.filmsContainerComponent.getElement());
-    render(new FilmsListTitle('Top rated'), this.filmsSectionExtraLeft.getElement());
-    render(this.divFilmsExtraLeft, this.filmsSectionExtraLeft.getElement());
+    render(this.filmsSectionExtraLeft, this.filmsContainerComponent.element);
+    render(new FilmsListTitle('Top rated'), this.filmsSectionExtraLeft.element);
+    render(this.divFilmsExtraLeft, this.filmsSectionExtraLeft.element);
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.sortedMoviesByRating[i]), this.divFilmsExtraLeft.getElement());
+      render(new FilmCardView(this.sortedMoviesByRating[i]), this.divFilmsExtraLeft.element);
     }
 
-    render(this.filmsSectionExtraRight, this.filmsContainerComponent.getElement());
-    render(new FilmsListTitle('Most commented'), this.filmsSectionExtraRight.getElement());
-    render(this.divFilmsExtraRight, this.filmsSectionExtraRight.getElement());
+    render(this.filmsSectionExtraRight, this.filmsContainerComponent.element);
+    render(new FilmsListTitle('Most commented'), this.filmsSectionExtraRight.element);
+    render(this.divFilmsExtraRight, this.filmsSectionExtraRight.element);
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.sortedMoviesByComments[i]), this.divFilmsExtraRight.getElement());
+      render(new FilmCardView(this.sortedMoviesByComments[i]), this.divFilmsExtraRight.element);
     }
   };
 

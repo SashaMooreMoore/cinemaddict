@@ -182,22 +182,25 @@ const createPopapTemplate = (movie) => {
 };
 
 export default class PopapView {
+  #element = null;
+  #movie = null;
+
   constructor(movie){
-    this.movie = movie;
+    this.#movie = movie;
   }
 
-  getTemplate(){
-    return createPopapTemplate(this.movie);
+  get template(){
+    return createPopapTemplate(this.#movie);
   }
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
+  get element(){
+    if(!this.#element){
+      this.#element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement(){
-    this.element = null;
+    this.#element = null;
   }
 }

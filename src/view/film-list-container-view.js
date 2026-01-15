@@ -16,22 +16,25 @@ const createFilmsListContainerTemplate = (emptyMessage = 'There are no movies in
   </section>`;
 
 export default class FilmsListContainer {
+  #element = null;
+  #emptyMessage = null;
+
   constructor(emptyMessage){
-    this.emptyMessage = emptyMessage;
+    this.#emptyMessage = emptyMessage;
   }
 
-  getTemplate() {
-    return createFilmsListContainerTemplate(this.emptyMessage);
+  get template() {
+    return createFilmsListContainerTemplate(this.#emptyMessage);
   }
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
+  get element(){
+    if(!this.#element){
+      this.element = createElement(this.template);
     }
-    return this.element;
+    return this.#element;
   }
 
   removeElement(){
-    this.element = null;
+    this.#element = null;
   }
 }
