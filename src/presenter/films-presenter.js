@@ -26,7 +26,6 @@ export default class FilmsPresenter {
   #sortedMoviesByRating = null;
   #sortedMoviesByComments = null;
   #currentPopapPresenter = null;
-  #renderMovies = null;
 
   init = (filmsContainer, filmModel) => {
 
@@ -35,11 +34,6 @@ export default class FilmsPresenter {
     this.#boardMovies = [...this.#filmModel.movies];
     this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
-    this.#renderMovies = [
-      ...this.#boardMovies.slice(0,5),
-      ...this.#sortedMoviesByRating.slice(0,2),
-      ...this.#sortedMoviesByComments.slice(0,2)
-    ];
 
     render(new FiltersView(), this.#filmsContainer);
     render(this.#filmsContainerComponent, this.#filmsContainer);
@@ -47,9 +41,7 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('All movies. Upcoming'), this.#filmsList.element);
     render(this.#filmsListDiv, this.#filmsList.element);
 
-    for (let i = 0; i < 5; i++) {
-      render(new FilmCardView(this.#boardMovies[i]), this.#filmsListDiv.element);
-    }
+    this.#renderMovieCards();
 
     render(new ShowMoreButtonView(), this.#filmsList.element);
 
@@ -58,6 +50,7 @@ export default class FilmsPresenter {
     render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
     for (let i = 0; i < 2; i++) {
       render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
+      this.#topRatedHandler(this.#sortedMoviesByRating[i]);
     }
 
     render(this.#filmsSectionExtraRight, this.#filmsContainerComponent.element);
@@ -65,19 +58,15 @@ export default class FilmsPresenter {
     render(this.#divFilmsExtraRight, this.#filmsSectionExtraRight.element);
     for (let i = 0; i < 2; i++) {
       render(new FilmCardView(this.#sortedMoviesByComments[i]), this.#divFilmsExtraRight.element);
+      this.#mostCommentedHandler(this.#sortedMoviesByComments[i]);
     }
 
-    this.#addCardClickHandlers();
+    this.#moreButtonHandler();
   };
 
-  #addCardClickHandlers = () => {
-    const cards = this.#filmsContainerComponent.element.querySelectorAll('.film-card__link');
-    cards.forEach((cardLink, index) => {
-      cardLink.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        this.#openPopap(this.#renderMovies[index]);
-      });
-    });
+  #moreButtonHandler = () => {
+    const btn = this.#filmsList.element.querySelector('.films-list__show-more');
+    btn.addEventListener('click', this.#renderMovieCards);
   };
 
   #openPopap = (movie) => {
@@ -87,5 +76,44 @@ export default class FilmsPresenter {
 
     this.#currentPopapPresenter = new PopapPresenter();
     this.#currentPopapPresenter.init(document.body, movie);
+  };
+
+  #renderMovieCards = () => {
+    let cardsToShowCount;
+    const renderedCardsCount = this.#filmsListDiv.element.querySelectorAll('.film-card__link').length;
+    if (this.#boardMovies){
+      cardsToShowCount = this.#boardMovies.length - renderedCardsCount >= 5 ?
+        5 : this.#boardMovies.length - renderedCardsCount;
+      // if(this.#boardMovies.length - renderedCardsCount >= 5){
+      //   cardsToShowCount = 5;
+      // } else {
+      //   cardsToShowCount = this.#boardMovies.length - renderedCardsCount;
+      // }
+    }
+    const arrToRender = [...this.#boardMovies].slice(renderedCardsCount, renderedCardsCount + cardsToShowCount);
+    arrToRender.forEach((movie) => {
+      render(new FilmCardView(movie), this.#filmsListDiv.element);
+      const lastChild = [...this.#filmsList.element.querySelectorAll('.film-card__link')].pop();
+      lastChild.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        this.#openPopap(movie);
+      });
+    });
+  };
+
+  #topRatedHandler = (movie) => {
+    const lastChild = [...this.#divFilmsExtraLeft.element.querySelectorAll('.film-card__link')].pop();
+    lastChild.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      this.#openPopap(movie);
+    });
+  };
+
+  #mostCommentedHandler = (movie) => {
+    const lastChild = [...this.#divFilmsExtraRight.element.querySelectorAll('.film-card__link')].pop();
+    lastChild.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      this.#openPopap(movie);
+    });
   };
 }
