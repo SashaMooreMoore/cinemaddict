@@ -14,21 +14,18 @@ export default class PopapPresenter {
 
   #popapSectionForm = new PopapSectionForm();
   #popapContainer;
-  #filmModel;
-  #boardMovies;
+  #movie;
 
-  init = (popapContainer, filmModel) => {
+  init = (popapContainer, movie) => {
     this.#popapContainer = popapContainer;
-    this.#filmModel = filmModel;
-    this.#boardMovies = [...this.#filmModel.movies];
-
+    this.#movie = movie;
 
     render(this.#popapSectionForm, this.#popapContainer, RenderPosition.AFTEREND);
     const formElement = this.#popapSectionForm.element.querySelector('.film-details__inner');
-    render(new FilmDetailsTopContainer(this.#boardMovies[0]), formElement, RenderPosition.BEFOREEND);
-    render(new FilmDetailsCommentsWrap(this.#boardMovies[0]), formElement);
+    render(new FilmDetailsTopContainer(this.#movie), formElement, RenderPosition.BEFOREEND);
+    render(new FilmDetailsCommentsWrap(this.#movie), formElement);
     const commentsList = this.#popapSectionForm.element.querySelector('.film-details__comments-list');
-    this.#boardMovies[0].comments.slice(0,4).forEach((id) => {
+    this.#movie.comments.slice(0,4).forEach((id) => {
       const comment = commentsObjects.find((c) => c.id === id);
       if (!comment) {return '';}
 
@@ -51,5 +48,31 @@ export default class PopapPresenter {
     });
     const commentsWrap = formElement.querySelector('.film-details__comments-wrap');
     render(new FilmDetailsNewComment(), commentsWrap);
+
+    document.body.classList.add('hide-overflow');
+
+    const closeButton = this.#popapSectionForm.element.querySelector('.film-details__close-btn');
+    closeButton.addEventListener('click', () => this.destroy());
+    document.body.addEventListener('keydown', this.onEscKeyDown);
   };
+
+  destroy = () => {
+    // Удаляем элемент из DOM
+    const element = this.#popapSectionForm.element;
+    if(element.parentNode) {
+      element.parentNode.removeChild(element);
+    }
+    // Очищаем ссылки
+    this.#popapSectionForm.removeElement();
+
+    document.body.classList.remove('hide-overflow');
+    document.body.removeEventListener('keydown', this.onEscKeyDown);
+  };
+
+  onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'esc'){
+      this.destroy();
+    }
+  };
+
 }
