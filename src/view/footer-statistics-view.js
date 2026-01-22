@@ -1,12 +1,17 @@
 import { createElement } from '../render.js';
 
-const createFooterFilmsStatisticsTemplate = () => '<p>130 291 movies inside</p>';
+const createFooterFilmsStatisticsTemplate = (movies) => `<p>${movies} movies inside</p>`;
 
 export default class FooterFilmsStatisticsView {
   #element = null;
+  #movies = null;
+
+  constructor(movies){
+    this.#movies = movies;
+  }
 
   get template() {
-    return createFooterFilmsStatisticsTemplate();
+    return createFooterFilmsStatisticsTemplate(this.#movies);
   }
 
   get element() {

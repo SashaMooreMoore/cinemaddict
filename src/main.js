@@ -13,7 +13,7 @@ const filmsPresenter = new FilmsPresenter();
 const movieModel = new MovieModel();
 
 render(new UserRankView(), siteHeaderElement);
-render(new FooterFilmsStatisticsView(), footerStatisticsElement);
+// render(new FooterFilmsStatisticsView(), footerStatisticsElement);
 render(new MenuView(), siteMainElement, RenderPosition.AFTERBEGIN);
 
 filmsPresenter.init(siteMainElement, movieModel);

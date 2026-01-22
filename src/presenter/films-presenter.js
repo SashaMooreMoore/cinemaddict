@@ -9,6 +9,9 @@ import FilmsListTitle from '../view/films-list-title';
 import FilmsListDiv from '../view/films-list-container';
 import FilmsListExtra from '../view/flim-list-extra';
 import PopapPresenter from './popap-presenter';
+import FilmListEmptyView from '../view/empty-films';
+import FooterFilmsStatisticsView from '../view/footer-statistics-view.js';
+
 
 export default class FilmsPresenter {
   #loadingComponent = new LoadingView();
@@ -36,38 +39,12 @@ export default class FilmsPresenter {
     this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
 
-    render(new FiltersView(), this.#filmsContainer);
-    render(this.#filmsContainerComponent, this.#filmsContainer);
-    render(this.#filmsList, this.#filmsContainerComponent.element);
-    render(new FilmsListTitle('All movies. Upcoming'), this.#filmsList.element);
-    render(this.#filmsListDiv, this.#filmsList.element);
-
-    this.#renderMovieCards();
-
-    render(this.#showMoreButton, this.#filmsList.element);
-
-    render(this.#filmsSectionExtraLeft, this.#filmsContainerComponent.element);
-    render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
-    render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
-    for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
-      this.#topRatedHandler(this.#sortedMoviesByRating[i]);
-    }
-
-    render(this.#filmsSectionExtraRight, this.#filmsContainerComponent.element);
-    render(new FilmsListTitle('Most commented'), this.#filmsSectionExtraRight.element);
-    render(this.#divFilmsExtraRight, this.#filmsSectionExtraRight.element);
-    for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.#sortedMoviesByComments[i]), this.#divFilmsExtraRight.element);
-      this.#mostCommentedHandler(this.#sortedMoviesByComments[i]);
-    }
-
-    this.#moreButtonHandler();
+    this.#renderBoardCards();
   };
 
   #moreButtonHandler = () => {
     const btn = this.#filmsList.element.querySelector('.films-list__show-more');
-    btn.addEventListener('click', this.#renderMovieCards);
+    btn.addEventListener('click', () => this.#renderMovieCards());
   };
 
   #openPopap = (movie) => {
@@ -88,12 +65,14 @@ export default class FilmsPresenter {
     }
     const arrToRender = [...this.#boardMovies].slice(renderedCardsCount, renderedCardsCount + cardsToShowCount);
     arrToRender.forEach((movie) => {
-      render(new FilmCardView(movie), this.#filmsListDiv.element);
-      const lastChild = [...this.#filmsList.element.querySelectorAll('.film-card__link')].pop();
-      lastChild.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        this.#openPopap(movie);
-      });
+      const cardView = new FilmCardView(movie);
+      render(cardView, this.#filmsListDiv.element);
+      cardView.element.querySelector('.film-card__link').addEventListener('click',
+        (evt) => {
+          evt.preventDefault();
+          this.#openPopap(movie);
+        }
+      );
     });
     this.#hideButton(this.#boardMovies.length);
   };
@@ -121,5 +100,47 @@ export default class FilmsPresenter {
       this.#showMoreButton.element.remove();
       this.#showMoreButton.removeElement();
     }
+  };
+
+  #renderTopRated = () => {
+    render(this.#filmsSectionExtraLeft, this.#filmsContainerComponent.element);
+    render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
+    render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
+      this.#topRatedHandler(this.#sortedMoviesByRating[i]);
+    }
+  };
+
+  #renderMostCommented = () => {
+    render(this.#filmsSectionExtraRight, this.#filmsContainerComponent.element);
+    render(new FilmsListTitle('Most commented'), this.#filmsSectionExtraRight.element);
+    render(this.#divFilmsExtraRight, this.#filmsSectionExtraRight.element);
+    for (let i = 0; i < 2; i++) {
+      render(new FilmCardView(this.#sortedMoviesByComments[i]), this.#divFilmsExtraRight.element);
+      this.#mostCommentedHandler(this.#sortedMoviesByComments[i]);
+    }
+  };
+
+  #renderBoardCards = () => {
+    const footerStatisticsElement = document.querySelector('.footer__statistics');
+    render(new FooterFilmsStatisticsView(this.#boardMovies.length), footerStatisticsElement);
+    if (this.#boardMovies.length === 0) {
+      render(new FilmListEmptyView(), this.#filmsContainer);
+      return;
+    }
+
+    render(new FiltersView(), this.#filmsContainer);
+    render(this.#filmsContainerComponent, this.#filmsContainer);
+    render(this.#filmsList, this.#filmsContainerComponent.element);
+    render(new FilmsListTitle('All movies. Upcoming'), this.#filmsList.element);
+    render(this.#filmsListDiv, this.#filmsList.element);
+
+    this.#renderMovieCards();
+
+    render(this.#showMoreButton, this.#filmsList.element);
+    this.#renderTopRated();
+    this.#renderMostCommented();
+    this.#moreButtonHandler();
   };
 }
