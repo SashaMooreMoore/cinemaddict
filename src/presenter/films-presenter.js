@@ -19,6 +19,7 @@ export default class FilmsPresenter {
   #filmsSectionExtraRight = new FilmsListExtra();
   #divFilmsExtraLeft = new FilmsListDiv();
   #divFilmsExtraRight = new FilmsListDiv();
+  #showMoreButton = new ShowMoreButtonView();
 
   #filmsContainer = null;
   #filmModel = null;
@@ -43,7 +44,7 @@ export default class FilmsPresenter {
 
     this.#renderMovieCards();
 
-    render(new ShowMoreButtonView(), this.#filmsList.element);
+    render(this.#showMoreButton, this.#filmsList.element);
 
     render(this.#filmsSectionExtraLeft, this.#filmsContainerComponent.element);
     render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
@@ -84,11 +85,6 @@ export default class FilmsPresenter {
     if (this.#boardMovies){
       cardsToShowCount = this.#boardMovies.length - renderedCardsCount >= 5 ?
         5 : this.#boardMovies.length - renderedCardsCount;
-      // if(this.#boardMovies.length - renderedCardsCount >= 5){
-      //   cardsToShowCount = 5;
-      // } else {
-      //   cardsToShowCount = this.#boardMovies.length - renderedCardsCount;
-      // }
     }
     const arrToRender = [...this.#boardMovies].slice(renderedCardsCount, renderedCardsCount + cardsToShowCount);
     arrToRender.forEach((movie) => {
@@ -99,6 +95,7 @@ export default class FilmsPresenter {
         this.#openPopap(movie);
       });
     });
+    this.#hideButton(this.#boardMovies.length);
   };
 
   #topRatedHandler = (movie) => {
@@ -115,5 +112,14 @@ export default class FilmsPresenter {
       evt.preventDefault();
       this.#openPopap(movie);
     });
+  };
+
+  #hideButton = (totalMovies) => {
+    const renderedCardsCount = this.#filmsListDiv.element.querySelectorAll('.film-card__link').length;
+
+    if (renderedCardsCount === totalMovies) {
+      this.#showMoreButton.element.remove();
+      this.#showMoreButton.removeElement();
+    }
   };
 }
