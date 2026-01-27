@@ -1,5 +1,5 @@
-import { createElement } from '../render.js';
 import { movieDateForPopap, convertRunTime } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createFilmDetailsTopContainerTemplate = (movie) => {
@@ -84,26 +84,15 @@ const createFilmDetailsTopContainerTemplate = (movie) => {
   );
 };
 
-export default class FilmDetailsTopContainer {
-  #element = null;
+export default class FilmDetailsTopContainer extends AbstractView{
   #movie = null;
 
   constructor(movie){
+    super();
     this.#movie = movie;
   }
 
   get template() {
     return createFilmDetailsTopContainerTemplate(this.#movie);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

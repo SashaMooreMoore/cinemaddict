@@ -1,5 +1,5 @@
-import { createElement } from '../render.js';
 import { movieDateForPopap, convertRunTime } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createPopapTemplate = (movie) => {
@@ -9,10 +9,10 @@ const createPopapTemplate = (movie) => {
 
   const runTime = convertRunTime(filmInfo.runtime);
 
-  const genre1 = filmInfo.genre[0];
-  const genre2 = filmInfo.genre[1] ? filmInfo.genre[1] : ' ';
-  const genre3 = filmInfo.genre[2] ? filmInfo.genre[1] : ' ';
-
+  const genres = Array.isArray(filmInfo.genre) ? filmInfo : [];
+  const genresHtml = genres
+    .map((genre) => `<span class="film-details__genre>${genre}</span>`)
+    .join('');
 
   return(
     `<section class="film-details">
@@ -68,9 +68,7 @@ const createPopapTemplate = (movie) => {
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">${genre1}</span>
-                <span class="film-details__genre">${genre2}</span>
-                <span class="film-details__genre">${genre3}</span></td>
+                ${genresHtml}</td>
             </tr>
           </table>
 
@@ -181,26 +179,15 @@ const createPopapTemplate = (movie) => {
   );
 };
 
-export default class PopapView {
-  #element = null;
+export default class PopapView extends AbstractView{
   #movie = null;
 
   constructor(movie){
+    super();
     this.#movie = movie;
   }
 
   get template(){
     return createPopapTemplate(this.#movie);
-  }
-
-  get element(){
-    if(!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }

@@ -1,4 +1,5 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
+
 
 const createFilmDetailsCommentsWrapTemplate = (movie) =>{
   const {comments} = movie;
@@ -14,26 +15,15 @@ const createFilmDetailsCommentsWrapTemplate = (movie) =>{
     </div>`
   );
 };
-export default class FilmDetailsCommentsWrap {
-  #element = null;
+export default class FilmDetailsCommentsWrap extends AbstractView{
   #movie = null;
 
   constructor(movie){
+    super();
     this.#movie = movie;
   }
 
   get template() {
     return createFilmDetailsCommentsWrapTemplate(this.#movie);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

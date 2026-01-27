@@ -1,5 +1,5 @@
-import { createElement } from '../render.js';
 import { humanizeMovieDueDate, convertRunTime, checkDescLength } from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createFilmCardTemplate = (movie) =>{
@@ -35,26 +35,15 @@ const createFilmCardTemplate = (movie) =>{
     </article>`);
 };
 
-export default class FilmCardView {
-  #element = null;
+export default class FilmCardView extends AbstractView{
   #movie = null;
 
   constructor(movie){
+    super();
     this.#movie = movie;
   }
 
   get template() {
     return createFilmCardTemplate(this.#movie);
-  }
-
-  get element(){
-    if(!this.#element){
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement(){
-    this.#element = null;
   }
 }
