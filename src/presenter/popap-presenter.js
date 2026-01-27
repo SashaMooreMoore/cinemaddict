@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../render';
+import { render, RenderPosition } from '../framework/render';
 import FilmDetailsTopContainer from '../view/film-details-top-container';
 import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
 import PopapSectionForm from '../view/popap-section-form';

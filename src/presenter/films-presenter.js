@@ -1,4 +1,5 @@
-import { render } from '../render';
+// import { render } from '../render';
+import { render } from '../framework/render.js';
 import LoadingView from '../view/loading-view';
 import FilmCardView from '../view/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button';
