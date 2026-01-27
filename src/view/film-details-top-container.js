@@ -86,6 +86,7 @@ const createFilmDetailsTopContainerTemplate = (movie) => {
 
 export default class FilmDetailsTopContainer extends AbstractView{
   #movie = null;
+  #closeButton = null;
 
   constructor(movie){
     super();
@@ -95,4 +96,22 @@ export default class FilmDetailsTopContainer extends AbstractView{
   get template() {
     return createFilmDetailsTopContainerTemplate(this.#movie);
   }
+
+  setBtnXHandler = (callback) => {
+    this.#closeButton = this.element.querySelector('.film-details__close-btn');
+    this._callback.click = callback;
+    this.#closeButton.addEventListener('click', this.#btnXHandler);
+  };
+
+  #btnXHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.click();
+  };
+
+  removeBtnXHandler = () => {
+    if(this.#closeButton){
+      this.#closeButton.removeEventListener('click', this.#btnXHandler);
+      this.#closeButton = null;
+    }
+  };
 }

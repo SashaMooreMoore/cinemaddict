@@ -13,16 +13,20 @@ dayjs.extend(relativeTime);
 export default class PopapPresenter {
 
   #popapSectionForm = new PopapSectionForm();
+  #filmDetailsTopContainer;
   #popapContainer;
   #movie;
 
   init = (popapContainer, movie) => {
     this.#popapContainer = popapContainer;
     this.#movie = movie;
+    this.#filmDetailsTopContainer = new FilmDetailsTopContainer(this.#movie);
 
     render(this.#popapSectionForm, this.#popapContainer, RenderPosition.AFTEREND);
     const formElement = this.#popapSectionForm.element.querySelector('.film-details__inner');
-    render(new FilmDetailsTopContainer(this.#movie), formElement, RenderPosition.BEFOREEND);
+    // render(new FilmDetailsTopContainer(this.#movie), formElement, RenderPosition.BEFOREEND);
+    render(this.#filmDetailsTopContainer, formElement, RenderPosition.BEFOREEND);
+
     render(new FilmDetailsCommentsWrap(this.#movie), formElement);
     const commentsList = this.#popapSectionForm.element.querySelector('.film-details__comments-list');
     this.#movie.comments.slice(0,4).forEach((id) => {
@@ -51,12 +55,15 @@ export default class PopapPresenter {
 
     document.body.classList.add('hide-overflow');
 
-    const closeButton = this.#popapSectionForm.element.querySelector('.film-details__close-btn');
-    closeButton.addEventListener('click', () => this.destroy());
+    this.#filmDetailsTopContainer.setBtnXHandler(() => {
+      this.destroy();
+    });
     document.body.addEventListener('keydown', this.onEscKeyDown);
   };
 
   destroy = () => {
+    // Удаляем обработчик клика Крестика
+    this.#filmDetailsTopContainer.removeBtnXHandler();
     // Удаляем элемент из DOM
     const element = this.#popapSectionForm.element;
     if(element.parentNode) {
