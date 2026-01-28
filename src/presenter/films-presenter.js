@@ -75,13 +75,14 @@ export default class FilmsPresenter {
     this.#hideButton(this.#boardMovies.length);
   };
 
-  #topRatedHandler = (movie) => {
-    const lastChild = [...this.#divFilmsExtraLeft.element.querySelectorAll('.film-card__link')].pop();
-    lastChild.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      this.#openPopap(movie);
-    });
-  };
+  // #topRatedHandler = (movie) => {
+  //   const lastChild = [...this.#divFilmsExtraLeft.element.querySelectorAll('.film-card__link')].pop();
+  //   // lastChild.addEventListener('click', (evt) => {
+  //   //   evt.preventDefault();
+  //   //   this.#openPopap(movie);
+  //   // });
+  //   lastChild.setCardClickHandler(() => {this.#openPopap(movie);});
+  // };
 
   #mostCommentedHandler = (movie) => {
     const lastChild = [...this.#divFilmsExtraRight.element.querySelectorAll('.film-card__link')].pop();
@@ -105,8 +106,11 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
     render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
-      this.#topRatedHandler(this.#sortedMoviesByRating[i]);
+      // render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
+      // this.#topRatedHandler(this.#sortedMoviesByRating[i]);
+      const filmCard = new FilmCardView(this.#sortedMoviesByRating[i]);
+      render(filmCard, this.#divFilmsExtraLeft.element);
+      filmCard.setCardClickHandler(() => {this.#openPopap(this.#sortedMoviesByRating[i]);});
     }
   };
 
