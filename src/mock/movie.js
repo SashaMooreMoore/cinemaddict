@@ -20,6 +20,7 @@ const generateArrayId = (array) => {
 
 const generateMovieObject = () => {
   const movieObject = {};
+  const alreadyWatched = Boolean(getRandomInteger(0,1));
 
   movieObject['id'] = String(getUniqueInteger(ID));
 
@@ -45,11 +46,11 @@ const generateMovieObject = () => {
 
   movieObject['user_details'] = {
     'watchlist': Boolean(getRandomInteger(0,1)),
-    'already_watched': Boolean(getRandomInteger(0,1)),
-    'watching_date': generateString(dates),
+    'already_watched': alreadyWatched,
+    'watching_date': (alreadyWatched) ? generateString(dates) : null,
+    // 'watching_date': generateString(dates),
     'favorite': Boolean(getRandomInteger(0,1))
   };
-
   return movieObject;
 
 };
