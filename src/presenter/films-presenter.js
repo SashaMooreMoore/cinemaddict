@@ -43,11 +43,6 @@ export default class FilmsPresenter {
     this.#renderBoardCards();
   };
 
-  #moreButtonHandler = () => {
-    const btn = this.#filmsList.element.querySelector('.films-list__show-more');
-    btn.addEventListener('click', () => this.#renderMovieCards());
-  };
-
   #openPopap = (movie) => {
     if(this.#currentPopapPresenter){
       this.#currentPopapPresenter.destroy();
@@ -75,23 +70,6 @@ export default class FilmsPresenter {
     this.#hideButton(this.#boardMovies.length);
   };
 
-  // #topRatedHandler = (movie) => {
-  //   const lastChild = [...this.#divFilmsExtraLeft.element.querySelectorAll('.film-card__link')].pop();
-  //   // lastChild.addEventListener('click', (evt) => {
-  //   //   evt.preventDefault();
-  //   //   this.#openPopap(movie);
-  //   // });
-  //   lastChild.setCardClickHandler(() => {this.#openPopap(movie);});
-  // };
-
-  #mostCommentedHandler = (movie) => {
-    const lastChild = [...this.#divFilmsExtraRight.element.querySelectorAll('.film-card__link')].pop();
-    lastChild.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      this.#openPopap(movie);
-    });
-  };
-
   #hideButton = (totalMovies) => {
     const renderedCardsCount = this.#filmsListDiv.element.querySelectorAll('.film-card__link').length;
 
@@ -106,10 +84,9 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
     render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
     for (let i = 0; i < 2; i++) {
-      // render(new FilmCardView(this.#sortedMoviesByRating[i]), this.#divFilmsExtraLeft.element);
-      // this.#topRatedHandler(this.#sortedMoviesByRating[i]);
       const filmCard = new FilmCardView(this.#sortedMoviesByRating[i]);
       render(filmCard, this.#divFilmsExtraLeft.element);
+      // Вешаем подписку по клику на карточку фильма на открытие попапа.
       filmCard.setCardClickHandler(() => {this.#openPopap(this.#sortedMoviesByRating[i]);});
     }
   };
@@ -119,8 +96,10 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Most commented'), this.#filmsSectionExtraRight.element);
     render(this.#divFilmsExtraRight, this.#filmsSectionExtraRight.element);
     for (let i = 0; i < 2; i++) {
-      render(new FilmCardView(this.#sortedMoviesByComments[i]), this.#divFilmsExtraRight.element);
-      this.#mostCommentedHandler(this.#sortedMoviesByComments[i]);
+      const filmCard = new FilmCardView(this.#sortedMoviesByComments[i]);
+      render(filmCard, this.#divFilmsExtraRight.element);
+      // Вешаем подписку по клику на карточку фильма на открытие попапа.
+      filmCard.setCardClickHandler(() => {this.#openPopap(this.#sortedMoviesByComments[i]);});
     }
   };
 
@@ -141,8 +120,8 @@ export default class FilmsPresenter {
     this.#renderMovieCards();
 
     render(this.#showMoreButton, this.#filmsList.element);
+    this.#showMoreButton.setClickHandler(() => {this.#renderMovieCards();});
     this.#renderTopRated();
     this.#renderMostCommented();
-    this.#moreButtonHandler();
   };
 }
