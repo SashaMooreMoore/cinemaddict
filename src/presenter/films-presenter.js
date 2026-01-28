@@ -68,12 +68,9 @@ export default class FilmsPresenter {
     arrToRender.forEach((movie) => {
       const cardView = new FilmCardView(movie);
       render(cardView, this.#filmsListDiv.element);
-      cardView.element.querySelector('.film-card__link').addEventListener('click',
-        (evt) => {
-          evt.preventDefault();
-          this.#openPopap(movie);
-        }
-      );
+      // Навешиваем обработчик по клику на карточку для открытия попапа
+      // При помощи встроего в представление метода
+      cardView.setCardClickHandler(() => {this.#openPopap(movie);});
     });
     this.#hideButton(this.#boardMovies.length);
   };
