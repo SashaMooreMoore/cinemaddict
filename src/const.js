@@ -10,4 +10,11 @@ const UserStatusTitle = {
   MOVIE_BUFF: 'Movie buff'
 };
 
-export { UserStatusValue, UserStatusTitle };
+const FilterType = {
+  ALL: null,
+  WATCHLIST: null,
+  HISTORY: null,
+  FAVORITES: null
+};
+
+export { UserStatusValue, UserStatusTitle, FilterType };

@@ -1,5 +1,5 @@
 // import { render } from '../render';
-import { render } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 import LoadingView from '../view/loading-view';
 import FilmCardView from '../view/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button';
@@ -12,6 +12,8 @@ import FilmsListExtra from '../view/flim-list-extra';
 import PopapPresenter from './popap-presenter';
 import FilmListEmptyView from '../view/empty-films';
 import FooterFilmsStatisticsView from '../view/footer-statistics-view.js';
+import MenuView from '../view/menu.js';
+import UserRankView from '../view/user-rank.js';
 
 
 export default class FilmsPresenter {
@@ -24,6 +26,7 @@ export default class FilmsPresenter {
   #divFilmsExtraLeft = new FilmsListDiv();
   #divFilmsExtraRight = new FilmsListDiv();
   #showMoreButton = new ShowMoreButtonView();
+  // #menuView = new MenuView();
 
   #filmsContainer = null;
   #filmModel = null;
@@ -105,7 +108,12 @@ export default class FilmsPresenter {
   };
 
   #renderBoardCards = () => {
+    const siteHeaderElement = document.querySelector('.header');
+    // const siteMainElement = document.querySelector('.main');
     const footerStatisticsElement = document.querySelector('.footer__statistics');
+
+    render(new UserRankView(), siteHeaderElement);
+    render(new MenuView(), this.#filmsContainer, RenderPosition.AFTERBEGIN);
     render(new FooterFilmsStatisticsView(this.#boardMovies.length), footerStatisticsElement);
     if (this.#boardMovies.length === 0) {
       render(new FilmListEmptyView(), this.#filmsContainer);
