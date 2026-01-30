@@ -48,7 +48,6 @@ const generateMovieObject = () => {
     'watchlist': Boolean(getRandomInteger(0,1)),
     'already_watched': alreadyWatched,
     'watching_date': (alreadyWatched) ? generateString(dates) : null,
-    // 'watching_date': generateString(dates),
     'favorite': Boolean(getRandomInteger(0,1))
   };
   return movieObject;

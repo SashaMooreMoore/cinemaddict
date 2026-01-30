@@ -1,15 +1,25 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { getUserStatus } from '../utils/user.js';
 
 
-const createUserRankTemplate = () => `<section class="header__profile profile">
-    <p class="profile__rating">Movie Buff</p>
-    <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-  </section>`;
+const createUserRankTemplate = (movies) => {
+  const status = getUserStatus(movies);
+  return(
+    `<section class="header__profile profile">
+      <p class="profile__rating">${status}</p>
+      <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
+    </section>`);};
 
 export default class UserRankView extends AbstractView{
+  #movies = null;
+
+  constructor(movies){
+    super();
+    this.#movies = movies;
+  }
 
   get template() {
-    return createUserRankTemplate();
+    return createUserRankTemplate(this.#movies);
   }
 }
 

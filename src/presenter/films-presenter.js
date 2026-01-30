@@ -1,5 +1,6 @@
 // import { render } from '../render';
 import { render, RenderPosition } from '../framework/render.js';
+import { generateFilter } from '../mock/filter.js';
 import LoadingView from '../view/loading-view';
 import FilmCardView from '../view/film-card-view';
 import ShowMoreButtonView from '../view/show-more-button';
@@ -26,7 +27,6 @@ export default class FilmsPresenter {
   #divFilmsExtraLeft = new FilmsListDiv();
   #divFilmsExtraRight = new FilmsListDiv();
   #showMoreButton = new ShowMoreButtonView();
-  // #menuView = new MenuView();
 
   #filmsContainer = null;
   #filmModel = null;
@@ -42,7 +42,6 @@ export default class FilmsPresenter {
     this.#boardMovies = [...this.#filmModel.movies];
     this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
-    console.log(this.#boardMovies);
 
     this.#renderBoardCards();
   };
@@ -109,11 +108,11 @@ export default class FilmsPresenter {
 
   #renderBoardCards = () => {
     const siteHeaderElement = document.querySelector('.header');
-    // const siteMainElement = document.querySelector('.main');
     const footerStatisticsElement = document.querySelector('.footer__statistics');
+    const filteredMoviesArray = generateFilter(this.#boardMovies);
 
-    render(new UserRankView(), siteHeaderElement);
-    render(new MenuView(), this.#filmsContainer, RenderPosition.AFTERBEGIN);
+    render(new UserRankView(this.#boardMovies), siteHeaderElement);
+    render(new MenuView(filteredMoviesArray), this.#filmsContainer, RenderPosition.AFTERBEGIN);
     render(new FooterFilmsStatisticsView(this.#boardMovies.length), footerStatisticsElement);
     if (this.#boardMovies.length === 0) {
       render(new FilmListEmptyView(), this.#filmsContainer);

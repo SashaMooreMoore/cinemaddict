@@ -6,15 +6,15 @@ const UserStatusValue = {
 
 const UserStatusTitle = {
   NOVICE: 'Novice',
-  FAT: 'Fan',
+  FAN: 'Fan',
   MOVIE_BUFF: 'Movie buff'
 };
 
 const FilterType = {
-  ALL: null,
-  WATCHLIST: null,
-  HISTORY: null,
-  FAVORITES: null
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites'
 };
 
 export { UserStatusValue, UserStatusTitle, FilterType };
