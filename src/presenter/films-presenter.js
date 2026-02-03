@@ -15,6 +15,8 @@ import FilmListEmptyView from '../view/empty-films';
 import FooterFilmsStatisticsView from '../view/footer-statistics-view.js';
 import MenuView from '../view/menu.js';
 import UserRankView from '../view/user-rank.js';
+import { sortMoviesByComments } from '../utils/sortMovies.js';
+import { sortMoviesByRating } from '../utils/sortMovies.js';
 
 
 export default class FilmsPresenter {
@@ -40,8 +42,10 @@ export default class FilmsPresenter {
     this.#filmsContainer = filmsContainer;
     this.#filmModel = filmModel;
     this.#boardMovies = [...this.#filmModel.movies];
-    this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
-    this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
+    // this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
+    this.#sortedMoviesByRating = sortMoviesByRating(this.#boardMovies);
+    // this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
+    this.#sortedMoviesByComments = sortMoviesByComments(this.#boardMovies);
 
     this.#renderBoardCards();
   };
