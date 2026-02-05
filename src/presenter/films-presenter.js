@@ -1,9 +1,6 @@
 // import { render } from '../render';
 import { render, RenderPosition } from '../framework/render.js';
 import { generateFilter } from '../mock/filter.js';
-import LoadingView from '../view/loading-view';
-import FilmCardView from '../view/film-card-view';
-import ShowMoreButtonView from '../view/show-more-button';
 import FiltersView from '../view/filter-view';
 import Films from '../view/fllms-view';
 import FilmsList from '../view/film-list-view';
@@ -17,10 +14,11 @@ import MenuView from '../view/menu.js';
 import UserRankView from '../view/user-rank.js';
 import { sortMoviesByComments } from '../utils/sortMovies.js';
 import { sortMoviesByRating } from '../utils/sortMovies.js';
+import FilmPresenter from './film-presenter.js';
+import ShowMoreButtonPresenter from './show-more-button-presenter.js';
 
 
 export default class FilmsPresenter {
-  #loadingComponent = new LoadingView();
   #filmsContainerComponent = new Films();
   #filmsList = new FilmsList();
   #filmsListDiv = new FilmsListDiv();
@@ -28,7 +26,6 @@ export default class FilmsPresenter {
   #filmsSectionExtraRight = new FilmsListExtra();
   #divFilmsExtraLeft = new FilmsListDiv();
   #divFilmsExtraRight = new FilmsListDiv();
-  #showMoreButton = new ShowMoreButtonView();
 
   #filmsContainer = null;
   #filmModel = null;
@@ -36,18 +33,23 @@ export default class FilmsPresenter {
   #sortedMoviesByRating = null;
   #sortedMoviesByComments = null;
   #currentPopapPresenter = null;
+  #showMoreButtonPresenter = null;
+  #renderedMoviesCount = 0;
 
   init = (filmsContainer, filmModel) => {
 
     this.#filmsContainer = filmsContainer;
     this.#filmModel = filmModel;
     this.#boardMovies = [...this.#filmModel.movies];
-    // this.#sortedMoviesByRating = [...this.#boardMovies].sort((a,b) => b['film_info']['total_rating'] - a['film_info']['total_rating']);
     this.#sortedMoviesByRating = sortMoviesByRating(this.#boardMovies);
-    // this.#sortedMoviesByComments = [...this.#boardMovies].sort((a,b) => b['comments'].length - a['comments'].length);
     this.#sortedMoviesByComments = sortMoviesByComments(this.#boardMovies);
+    this.#showMoreButtonPresenter = new ShowMoreButtonPresenter({
+      container: this.#filmsList.element,
+      onClick: () => this.#renderMovieCards(this.#filmsListDiv.element)
+    });
 
     this.#renderBoardCards();
+    this.#showMoreButtonPresenter.init();
   };
 
   #openPopap = (movie) => {
@@ -59,31 +61,28 @@ export default class FilmsPresenter {
     this.#currentPopapPresenter.init(document.body, movie);
   };
 
-  #renderMovieCards = () => {
-    let cardsToShowCount;
-    const renderedCardsCount = this.#filmsListDiv.element.querySelectorAll('.film-card__link').length;
-    if (this.#boardMovies){
-      cardsToShowCount = this.#boardMovies.length - renderedCardsCount >= 5 ?
-        5 : this.#boardMovies.length - renderedCardsCount;
-    }
-    const arrToRender = [...this.#boardMovies].slice(renderedCardsCount, renderedCardsCount + cardsToShowCount);
-    arrToRender.forEach((movie) => {
-      const cardView = new FilmCardView(movie);
-      render(cardView, this.#filmsListDiv.element);
-      // Навешиваем обработчик по клику на карточку для открытия попапа
-      // При помощи встроего в представление метода
-      cardView.setCardClickHandler(() => {this.#openPopap(movie);});
+  #renderMovieCards = (container) => {
+    const remaining = this.#boardMovies.length - this.#renderedMoviesCount;
+    const cardsToShow = Math.min(5, remaining);
+
+    if(cardsToShow <= 0) {return;}
+    const moviesToRender = [...this.#boardMovies].slice(
+      this.#renderedMoviesCount,
+      this.#renderedMoviesCount + cardsToShow
+    );
+
+    moviesToRender.forEach((movie) => {
+      const filmCard = new FilmPresenter({
+        container: container,
+        onOpenPopap: (film) => this.#openPopap(film)
+      });
+      filmCard.init(movie);
     });
-    this.#hideButton(this.#boardMovies.length);
-  };
-
-  #hideButton = (totalMovies) => {
-    const renderedCardsCount = this.#filmsListDiv.element.querySelectorAll('.film-card__link').length;
-
-    if (renderedCardsCount === totalMovies) {
-      this.#showMoreButton.element.remove();
-      this.#showMoreButton.removeElement();
-    }
+    this.#renderedMoviesCount += cardsToShow;
+    this.#showMoreButtonPresenter.updateState(
+      this.#boardMovies.length,
+      this.#renderedMoviesCount
+    );
   };
 
   #renderTopRated = () => {
@@ -91,10 +90,11 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Top rated'), this.#filmsSectionExtraLeft.element);
     render(this.#divFilmsExtraLeft, this.#filmsSectionExtraLeft.element);
     for (let i = 0; i < 2; i++) {
-      const filmCard = new FilmCardView(this.#sortedMoviesByRating[i]);
-      render(filmCard, this.#divFilmsExtraLeft.element);
-      // Вешаем подписку по клику на карточку фильма на открытие попапа.
-      filmCard.setCardClickHandler(() => {this.#openPopap(this.#sortedMoviesByRating[i]);});
+      const filmCard = new FilmPresenter({
+        container: this.#divFilmsExtraLeft.element,
+        onOpenPopap: (film) => this.#openPopap(film)
+      });
+      filmCard.init(this.#sortedMoviesByRating[i]);
     }
   };
 
@@ -103,10 +103,11 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('Most commented'), this.#filmsSectionExtraRight.element);
     render(this.#divFilmsExtraRight, this.#filmsSectionExtraRight.element);
     for (let i = 0; i < 2; i++) {
-      const filmCard = new FilmCardView(this.#sortedMoviesByComments[i]);
-      render(filmCard, this.#divFilmsExtraRight.element);
-      // Вешаем подписку по клику на карточку фильма на открытие попапа.
-      filmCard.setCardClickHandler(() => {this.#openPopap(this.#sortedMoviesByComments[i]);});
+      const filmCard = new FilmPresenter({
+        container: this.#divFilmsExtraRight.element,
+        onOpenPopap: (film) => this.#openPopap(film)
+      });
+      filmCard.init(this.#sortedMoviesByComments[i]);
     }
   };
 
@@ -129,10 +130,7 @@ export default class FilmsPresenter {
     render(new FilmsListTitle('All movies. Upcoming'), this.#filmsList.element);
     render(this.#filmsListDiv, this.#filmsList.element);
 
-    this.#renderMovieCards();
-
-    render(this.#showMoreButton, this.#filmsList.element);
-    this.#showMoreButton.setClickHandler(() => {this.#renderMovieCards();});
+    this.#renderMovieCards(this.#filmsListDiv.element);
     this.#renderTopRated();
     this.#renderMostCommented();
   };
