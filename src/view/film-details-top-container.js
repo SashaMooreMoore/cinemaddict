@@ -3,7 +3,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 
 const createFilmDetailsTopContainerTemplate = (movie) => {
-  const {film_info: filmInfo} = movie;
+  const {film_info: filmInfo, user_details: userDetails} = movie;
 
   const date = movieDateForPopap(filmInfo['release']['date']);
 
@@ -12,6 +12,15 @@ const createFilmDetailsTopContainerTemplate = (movie) => {
   const genresHTML = filmInfo.genre
     .map((genre) => `<span class="film-details__genre">${genre}</span>`)
     .join('');
+
+  const watchlistClass = userDetails.watchlist ? 'film-details__control-button film-details__control-button--active film-details__control-button--watchlist' :
+    'film-details__control-button film-details__control-button--watchlist';
+
+  const watchedClass = userDetails.already_watched ? 'film-details__control-button film-details__control-button--active film-details__control-button--watched' :
+    'film-details__control-button film-details__control-button--watched';
+
+  const favoriteClass = userDetails.favorite ? 'film-details__control-button film-details__control-button--active film-details__control-button--favorite' :
+    'film-details__control-button film-details__control-button--favorite';
 
 
   return (
@@ -76,9 +85,9 @@ const createFilmDetailsTopContainerTemplate = (movie) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="${watchlistClass}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="${watchedClass}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="${favoriteClass}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>`
   );
