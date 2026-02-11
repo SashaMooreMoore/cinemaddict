@@ -12,10 +12,10 @@ import FilmListEmptyView from '../view/empty-films';
 import FooterFilmsStatisticsView from '../view/footer-statistics-view.js';
 import MenuView from '../view/menu.js';
 import UserRankView from '../view/user-rank.js';
-import { sortMoviesByComments } from '../utils/sortMovies.js';
-import { sortMoviesByRating } from '../utils/sortMovies.js';
+import { sortMoviesByComments, sortMoviesByRating } from '../utils/sortMovies.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonPresenter from './show-more-button-presenter.js';
+import { updateItem } from '../utils/common.js';
 
 
 export default class FilmsPresenter {
@@ -35,6 +35,7 @@ export default class FilmsPresenter {
   #currentPopapPresenter = null;
   #showMoreButtonPresenter = null;
   #renderedMoviesCount = 0;
+  #filmPresenter = new Map();
 
   init = (filmsContainer, filmModel) => {
 
@@ -52,6 +53,11 @@ export default class FilmsPresenter {
     this.#showMoreButtonPresenter.init();
   };
 
+  #filmChangeHandler = (updatedFilm) => {
+    this.#boardMovies = updateItem(this.#boardMovies, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+  };
+
   #openPopap = (movie) => {
     if(this.#currentPopapPresenter){
       this.#currentPopapPresenter.destroy();
@@ -66,23 +72,30 @@ export default class FilmsPresenter {
     const cardsToShow = Math.min(5, remaining);
 
     if(cardsToShow <= 0) {return;}
+
     const moviesToRender = [...this.#boardMovies].slice(
       this.#renderedMoviesCount,
       this.#renderedMoviesCount + cardsToShow
     );
 
     moviesToRender.forEach((movie) => {
-      const filmCard = new FilmPresenter({
-        container: container,
-        onOpenPopap: (film) => this.#openPopap(film)
-      });
-      filmCard.init(movie);
+      this.#renderFilm(movie, container);
     });
     this.#renderedMoviesCount += cardsToShow;
     this.#showMoreButtonPresenter.updateState(
       this.#boardMovies.length,
       this.#renderedMoviesCount
     );
+  };
+
+  #renderFilm = (movie, container) => {
+    const filmCard = new FilmPresenter({
+      container: container,
+      onOpenPopap: (film) => this.#openPopap(film),
+      changeData: this.#filmChangeHandler
+    });
+    filmCard.init(movie);
+    this.#filmPresenter.set(movie.id, filmCard);
   };
 
   #renderTopRated = () => {
