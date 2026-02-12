@@ -53,6 +53,8 @@ export default class FilmsPresenter {
     this.#showMoreButtonPresenter.init();
   };
 
+  // Получает обновленный объект фильма, удаляет старый аналогичный
+  // И заменеят его обновленным и сразу же вызывает его перерисовку
   #filmChangeHandler = (updatedFilm) => {
     this.#boardMovies = updateItem(this.#boardMovies, updatedFilm);
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
@@ -63,7 +65,14 @@ export default class FilmsPresenter {
       this.#currentPopapPresenter.destroy();
     }
 
-    this.#currentPopapPresenter = new PopapPresenter();
+    this.#currentPopapPresenter = new PopapPresenter({
+      onUpdateFilm: (updatedFilm) => {
+        // Обновляем модель
+        this.#boardMovies = updateItem(this.#boardMovies, updatedFilm);
+        // Обновляем карточку
+        this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+      }
+    });
     this.#currentPopapPresenter.init(document.body, movie);
   };
 
@@ -92,9 +101,13 @@ export default class FilmsPresenter {
     const filmCard = new FilmPresenter({
       container: container,
       onOpenPopap: (film) => this.#openPopap(film),
+
+      //Сюда мы передаем метод, который должен получить измененную карточку фильма
+      // обновить общий список и вызвать перерисовку обновленной карточки
       changeData: this.#filmChangeHandler
     });
     filmCard.init(movie);
+    // Сохраняем презетер фильма в мапе
     this.#filmPresenter.set(movie.id, filmCard);
   };
 

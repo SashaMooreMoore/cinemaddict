@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../framework/render';
+import { render, RenderPosition, replace } from '../framework/render';
 import FilmDetailsTopContainer from '../view/film-details-top-container';
 import FilmDetailsCommentsWrap from '../view/film-details-comments-wrap';
 import PopapSectionForm from '../view/popap-section-form';
@@ -13,19 +13,23 @@ dayjs.extend(relativeTime);
 export default class PopapPresenter {
 
   #popapSectionForm = new PopapSectionForm();
-  #filmDetailsTopContainer;
+  #filmDetailsTopContainer = null;
   #popapContainer;
   #movie;
+  #onUpdateFilm = null;
+
+  constructor({ onUpdateFilm }){
+    this.#onUpdateFilm = onUpdateFilm;
+  }
 
   init = (popapContainer, movie) => {
     this.#popapContainer = popapContainer;
     this.#movie = movie;
-    this.#filmDetailsTopContainer = new FilmDetailsTopContainer(this.#movie);
 
     render(this.#popapSectionForm, this.#popapContainer, RenderPosition.AFTEREND);
     const formElement = this.#popapSectionForm.element.querySelector('.film-details__inner');
-    // render(new FilmDetailsTopContainer(this.#movie), formElement, RenderPosition.BEFOREEND);
-    render(this.#filmDetailsTopContainer, formElement, RenderPosition.BEFOREEND);
+
+    this.#renderTopContainer(this.#movie);
 
     render(new FilmDetailsCommentsWrap(this.#movie), formElement);
     const commentsList = this.#popapSectionForm.element.querySelector('.film-details__comments-list');
@@ -60,6 +64,66 @@ export default class PopapPresenter {
     });
     document.body.addEventListener('keydown', this.onEscKeyDown);
   };
+
+  #renderTopContainer = (movie) => {
+    const newTopContainer = new FilmDetailsTopContainer(movie);
+    const formElement = this.#popapSectionForm.element.querySelector('.film-details__inner');
+
+    // Передаем обработчики
+    newTopContainer.setWhatchlistClickHandler(() => {this.#handleWatchlistClick();});
+    newTopContainer.setWhatchedClickHandler(() => {this.#handleWatchedClick();});
+    newTopContainer.setFavoriteClickHandler(() => {this.#handleFavoriteClick();});
+
+    if(this.#filmDetailsTopContainer){
+      replace(newTopContainer, this.#filmDetailsTopContainer);
+    } else {
+      render(newTopContainer, formElement, RenderPosition.BEFOREEND);
+    }
+
+    this.#filmDetailsTopContainer = newTopContainer;
+  };
+
+  #handleWatchlistClick = () => {
+    const updatedFilm = {
+      ...this.#movie,
+      user_details: {
+        ...this.#movie.user_details,
+        watchlist: !this.#movie.user_details.watchlist
+      }
+    };
+    this.#movie = updatedFilm;
+    this.#onUpdateFilm(updatedFilm); //Уведомляем filmsPresenter
+    this.#renderTopContainer(updatedFilm);
+  };
+
+  #handleWatchedClick = () => {
+    const updatedFilm = {
+      ...this.#movie,
+      user_details: {
+        ...this.#movie.user_details,
+        already_watched: !this.#movie.user_details.already_watched
+      }
+    };
+    this.#movie = updatedFilm;
+    this.#onUpdateFilm(updatedFilm); //Уведомляем filmsPresenter
+    this.#renderTopContainer(updatedFilm);
+
+  };
+
+  #handleFavoriteClick = () => {
+    const updatedFilm = {
+      ...this.#movie,
+      user_details: {
+        ...this.#movie.user_details,
+        favorite: !this.#movie.user_details.favorite
+      }
+    };
+    this.#movie = updatedFilm;
+    this.#onUpdateFilm(updatedFilm); //Уведомляем filmsPresenter
+    this.#renderTopContainer(updatedFilm);
+
+  };
+
 
   destroy = () => {
     // Удаляем обработчик клика Крестика

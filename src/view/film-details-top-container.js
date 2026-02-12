@@ -96,6 +96,10 @@ const createFilmDetailsTopContainerTemplate = (movie) => {
 export default class FilmDetailsTopContainer extends AbstractView{
   #movie = null;
   #closeButton = null;
+  #watchlistBtn = null;
+  #watchedBtn = null;
+  #favoriteBtn = null;
+
 
   constructor(movie){
     super();
@@ -122,5 +126,44 @@ export default class FilmDetailsTopContainer extends AbstractView{
       this.#closeButton.removeEventListener('click', this.#btnXHandler);
       this.#closeButton = null;
     }
+  };
+
+  setWhatchlistClickHandler = (callback) => {
+    this.#watchlistBtn = this.element.querySelector('.film-details__control-button--watchlist');
+    if(this._callback.watchlistClick){
+      return;}
+    this._callback.watchlistClick = callback;
+    this.#watchlistBtn.addEventListener('click', this.#watchlistBtnHandler);
+  };
+
+  setWhatchedClickHandler = (callback) => {
+    this.#watchedBtn = this.element.querySelector('.film-details__control-button--watched');
+    if(this._callback.watchedClick){
+      return;}
+    this._callback.watchedClick = callback;
+    this.#watchedBtn.addEventListener('click', this.#watchedBtnHandler);
+  };
+
+  setFavoriteClickHandler = (callback) => {
+    this.#favoriteBtn = this.element.querySelector('.film-details__control-button--favorite');
+    if(this._callback.favoriteClick){
+      return;}
+    this._callback.favoriteClick = callback;
+    this.#favoriteBtn.addEventListener('click', this.#favoriteBtnHandler);
+  };
+
+  #watchlistBtnHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchlistClick();
+  };
+
+  #watchedBtnHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  };
+
+  #favoriteBtnHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   };
 }
