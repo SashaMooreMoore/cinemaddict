@@ -12,5 +12,10 @@ const updateItem = (items, update) => {
   ];
 };
 
+const sortFilmsByDate = (filmA, filmB) =>
+  new Date(filmB.film_info.release.date) - new Date(filmA.film_info.release.date);
 
-export{ updateItem };
+const sortFilmsByRating = (filmA, filmB) =>
+  filmB.film_info.total_rating - filmA.film_info.total_rating;
+
+export{ updateItem, sortFilmsByDate, sortFilmsByRating };

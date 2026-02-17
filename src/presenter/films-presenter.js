@@ -1,5 +1,5 @@
 // import { render } from '../render';
-import { render, RenderPosition } from '../framework/render.js';
+import { render, RenderPosition, replace } from '../framework/render.js';
 import { generateFilter } from '../mock/filter.js';
 import FiltersView from '../view/filter-view';
 import Films from '../view/fllms-view';
@@ -15,7 +15,8 @@ import UserRankView from '../view/user-rank.js';
 import { sortMoviesByComments, sortMoviesByRating } from '../utils/sortMovies.js';
 import FilmPresenter from './film-presenter.js';
 import ShowMoreButtonPresenter from './show-more-button-presenter.js';
-import { updateItem } from '../utils/common.js';
+import { sortFilmsByDate, sortFilmsByRating, updateItem } from '../utils/common.js';
+import { SortType } from '../const.js';
 
 
 export default class FilmsPresenter {
@@ -36,6 +37,8 @@ export default class FilmsPresenter {
   #showMoreButtonPresenter = null;
   #renderedMoviesCount = 0;
   #filmPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sortComponent = null;
 
   init = (filmsContainer, filmModel) => {
 
@@ -74,6 +77,56 @@ export default class FilmsPresenter {
       }
     });
     this.#currentPopapPresenter.init(document.body, movie);
+  };
+
+  // Реагируте на выбор пользователя нового вида сортировки и
+  // запускает полный цикл обновления
+  #sortTypeChangeHandler = (sortType) => {
+    if(this.#currentSortType === sortType) {
+      return;
+    }
+
+    // Сохраняем новый тип сортировки
+    this.#currentSortType = sortType;
+
+    // Сортируем массив фильмов
+    this.#sortFilms(sortType);
+
+    // Перерисовываем блок сортировки чтобы активная кнопка обновилась
+    this.#renderSort(this.#filmsContainer);
+
+    // Сбрасываем пагинацию
+    this.#renderedMoviesCount = 0;
+    // Очищаем контейнер фильмов
+    this.#filmsListDiv.element.innerHTML = '';
+
+    this.#renderMovieCards(this.#filmsListDiv.element);
+  };
+
+  #sortFilms = (sortType) => {
+    switch (sortType) {
+      case SortType.DATE:
+        this.#boardMovies.sort(sortFilmsByDate);
+        break;
+      case SortType.RATING:
+        this.#boardMovies.sort(sortFilmsByRating);
+        break;
+      default:
+        this.#boardMovies = [...this.#filmModel.movies];
+    }
+  };
+
+  #renderSort = (container) => {
+    if(!this.#sortComponent) {
+      this.#sortComponent = new FiltersView(this.#currentSortType);
+      render(this.#sortComponent, container);
+    } else {
+      const updatedSortComponent = new FiltersView(this.#currentSortType);
+      replace(updatedSortComponent, this.#sortComponent);
+      this.#sortComponent = updatedSortComponent;
+    }
+
+    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler);
   };
 
   #renderMovieCards = (container) => {
@@ -118,7 +171,8 @@ export default class FilmsPresenter {
     for (let i = 0; i < 2; i++) {
       const filmCard = new FilmPresenter({
         container: this.#divFilmsExtraLeft.element,
-        onOpenPopap: (film) => this.#openPopap(film)
+        onOpenPopap: (film) => this.#openPopap(film),
+        changeData: this.#filmChangeHandler
       });
       filmCard.init(this.#sortedMoviesByRating[i]);
     }
@@ -131,7 +185,8 @@ export default class FilmsPresenter {
     for (let i = 0; i < 2; i++) {
       const filmCard = new FilmPresenter({
         container: this.#divFilmsExtraRight.element,
-        onOpenPopap: (film) => this.#openPopap(film)
+        onOpenPopap: (film) => this.#openPopap(film),
+        changeData: this.#filmChangeHandler
       });
       filmCard.init(this.#sortedMoviesByComments[i]);
     }
@@ -150,7 +205,12 @@ export default class FilmsPresenter {
       return;
     }
 
-    render(new FiltersView(), this.#filmsContainer);
+    this.#sortComponent = new FiltersView(this.#currentSortType);
+    render(this.#sortComponent, this.#filmsContainer);
+
+    // Активируем обработчик кнопок фильтрации
+    this.#sortComponent.setSortTypeChangeHandler((sortType) => {this.#sortTypeChangeHandler(sortType);});
+
     render(this.#filmsContainerComponent, this.#filmsContainer);
     render(this.#filmsList, this.#filmsContainerComponent.element);
     render(new FilmsListTitle('All movies. Upcoming'), this.#filmsList.element);
