@@ -55,7 +55,8 @@ export default class PopapPresenter {
       commentsList.append(commentElement);
     });
     const commentsWrap = formElement.querySelector('.film-details__comments-wrap');
-    render(new FilmDetailsNewComment(), commentsWrap);
+    const newComment = new FilmDetailsNewComment(movie);
+    render(newComment, commentsWrap);
 
     document.body.classList.add('hide-overflow');
 

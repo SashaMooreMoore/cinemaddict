@@ -49,4 +49,11 @@ export default class AbstractStatefulView extends AbstractView {
 
     this._restoreHandlers();
   };
+
+  static parseFilmToState = (movie, checkedEmotion = null, comment = null, scrollPosition = 0) => ({
+    ...movie,
+    checkedEmotion,
+    comment,
+    scrollPosition
+  });
 }
